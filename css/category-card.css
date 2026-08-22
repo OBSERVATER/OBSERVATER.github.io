@@ -1,0 +1,114 @@
+#categoryBar {
+  width: 100% !important;
+}
+ul.categoryBar-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 5px 0 0 0 !important;
+  padding: 0 !important;
+}
+li.categoryBar-list-item {
+  font-weight: bold;
+  flex: 1 1 30%;
+  min-width: 200px;
+  height: 180px !important;
+  border-radius: 10px;
+  padding: 25px 0 25px 25px !important;
+  box-shadow: rgba(50,50,50,0.3) 50px 50px 50px 50px inset;
+  overflow: hidden;
+  position: relative;
+}
+/* 背景图：真实 img 元素（transform 缩放，可靠平滑放大） */
+li.categoryBar-list-item .categoryCard-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform .5s ease-in-out;
+  will-change: transform;
+}
+li.categoryBar-list-item:hover .categoryCard-bg {
+  transform: scale(1.1);
+}
+/* 黑色遮罩：真实元素（hover 淡入，移出淡出） */
+li.categoryBar-list-item .categoryCard-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity .5s ease-in-out;
+  z-index: 1;
+  pointer-events: none;
+}
+li.categoryBar-list-item:hover .categoryCard-mask {
+  opacity: 1;
+}
+/* 文字浮在遮罩之上（排除遮罩自身） */
+li.categoryBar-list-item > a,
+li.categoryBar-list-item > span:not(.categoryCard-mask) {
+  position: relative;
+  z-index: 2;
+}
+li.categoryBar-list-item:hover span.categoryBar-list-descr {
+  transition: all 0.5s;
+  transform: translate(-100%, 0);
+}
+a.categoryBar-list-link {
+  color: #fff !important;
+  font-size: 20px !important;
+}
+a.categoryBar-list-link::before {
+  content: '|' !important;
+  color: #fff !important;
+  font-size: 20px !important;
+}
+a.categoryBar-list-link:after {
+  content: '';
+  position: relative;
+  width: 0;
+  bottom: 0;
+  display: block;
+  height: 3px;
+  border-radius: 3px;
+  background-color: #fff;
+}
+a.categoryBar-list-link:hover:after {
+  width: 90%;
+  left: 1%;
+  transition: all 0.5s;
+}
+span.categoryBar-list-count {
+  display: block !important;
+  color: #fff !important;
+  font-size: 20px !important;
+}
+span.categoryBar-list-count::before {
+  content: '\f02d' !important;
+  padding-right: 15px !important;
+  display: inline-block;
+  font-weight: 600;
+  font-style: normal;
+  font-variant: normal;
+  font-family: 'Font Awesome 6 Free';
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+span.categoryBar-list-descr {
+  padding: 5px;
+  display: block !important;
+  color: #fff !important;
+  font-size: 20px !important;
+  position: relative;
+  right: -100%;
+}
+@media screen and (max-width: 650px) {
+  li.categoryBar-list-item {
+    flex: 1 1 48%;
+    min-width: 0;
+    height: 150px !important;
+    padding: 15px 0 15px 15px !important;
+  }
+}
