@@ -1,0 +1,189 @@
+/* 作品集卡片（Win7 毛玻璃 + 薄荷绿） */
+
+.works-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.works-card {
+  flex: 1 1 calc(33.333% - 16px);
+  min-width: 240px;
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.works-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+/* 封面区：深色质感 + 几何纹理 + 底部薄荷绿渐变光条 */
+.works-cover {
+  position: relative;
+  height: 130px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1f3d31, #0e2018); /* 兜底深色 */
+}
+
+/* 每卡渐变（脚本按 works.gradient_palette 设置） */
+.works-cover-bg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 1;
+}
+
+/* 几何纹理：错位圆点 */
+.works-cover-pattern {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1.6px),
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.6px);
+  background-size: 22px 22px, 11px 11px;
+  background-position: 0 0, 5px 5px;
+}
+
+/* 底部薄荷绿渐变光条 */
+.works-cover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  z-index: 4;
+  background: linear-gradient(90deg, #3cb878, #66d69b, #3cb878);
+  opacity: 0.85;
+}
+
+/* 作品名（深底白字，居中） */
+.works-cover-name {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* 图片缩放动画（仿首页分类卡片：0.5s + will-change + scale1.1）
+   注意：主题有 .container img 规则会覆盖 img 的 transition，
+   这里用更高权重的 .works-cover .works-cover-img，并保留 filter 过渡（懒加载淡入） */
+.works-cover .works-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease-in-out, filter 375ms ease-in 0.2s;
+  will-change: transform;
+}
+
+.works-card:hover .works-cover .works-cover-img {
+  transform: scale(1.1);
+}
+
+/* 黑色遮罩：图片卡片 hover 淡入（仿首页分类卡片） */
+.works-cover .works-cover-mask {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.works-card.has-img .works-cover .works-cover-mask {
+  display: block;
+}
+
+.works-card.has-img:hover .works-cover .works-cover-mask {
+  opacity: 1;
+}
+
+/* 有真实封面图时：纹理/光条/名字隐藏，图片铺满 */
+.works-card.has-img .works-cover-name,
+.works-card.has-img .works-cover-pattern,
+.works-card.has-img .works-cover::after {
+  display: none;
+}
+
+.works-body {
+  padding: 14px 16px 16px;
+}
+
+.works-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2b2b2b;
+  word-break: break-all;
+}
+
+.works-year {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #3cb878;
+  background: rgba(60, 184, 120, 0.12);
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+.works-desc {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #6a6a6a;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.works-meta {
+  margin-top: 12px;
+}
+
+.works-post {
+  display: inline-block;
+  font-size: 13px;
+  color: #3cb878;
+  text-decoration: none;
+}
+
+.works-post:hover {
+  text-decoration: underline;
+}
+
+/* 空状态 */
+.works-empty {
+  width: 100%;
+  text-align: center;
+  padding: 60px 0;
+  color: #999;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .works-card {
+    flex: 1 1 100%;
+  }
+}
