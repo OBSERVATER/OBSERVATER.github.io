@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>算法题集</title>
+      <link href="/2026/09/5a2b52d7d92d.html"/>
+      <url>/2026/09/5a2b52d7d92d.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="题目：53-最大子数组和-Maximum-Subarray"><a href="#题目：53-最大子数组和-Maximum-Subarray" class="headerlink" title="题目：53. 最大子数组和 (Maximum Subarray)"></a>题目：53. 最大子数组和 (Maximum Subarray)</h2><ul><li>链接：<a href="https://leetcode.cn/problems/maximum-subarray/">https://leetcode.cn/problems/maximum-subarray/</a></li><li>难度：Easy-Medium（思路卡壳时像 Medium）</li><li>标签： #数组 #DP #前缀和</li><li>首次日期：2026-09-16</li></ul><hr><h3 id="1-当时为什么不会做？（核心卡点）"><a href="#1-当时为什么不会做？（核心卡点）" class="headerlink" title="1. 当时为什么不会做？（核心卡点）"></a>1. 当时为什么不会做？（核心卡点）</h3><p><strong>直觉方向</strong>：看到”连续子数组” + “最大和”，第一反应是<strong>滑动窗口 &#x2F; 双指针</strong>。</p><p><strong>卡住点</strong>：<br>&gt; 我知道要维护一个窗口 <code>[left, right]</code> 和窗口和 <code>sum</code>，<code>right</code> 向右扩展没问题，但<strong>完全找不到 <code>left</code> 右移（缩小窗口）的条件</strong>。</p><p><strong>为什么找不到？</strong><br>因为数组里有<strong>负数</strong>。传统滑动窗口（如”和大于 target 的最短子数组”）能缩窗口，依赖于<strong>窗口和随 left 右移而单调递减</strong>。但这里有负数时：</p><ul><li>窗口和不是单调的</li><li>即使当前和很大，也不能随便缩 left，因为后面可能有更大的正数把前面的负数”填平”</li><li>根本不存在一个明确的”缩小条件”让 left 优雅右移</li></ul><p><strong>结论</strong>：这题<strong>不是标准滑动窗口题</strong>，试图找 <code>left++</code> 的条件本身就是死路。</p><hr><h3 id="2-核心思路（正确解法-与滑动窗口的和解）"><a href="#2-核心思路（正确解法-与滑动窗口的和解）" class="headerlink" title="2. 核心思路（正确解法 &amp; 与滑动窗口的和解）"></a>2. 核心思路（正确解法 &amp; 与滑动窗口的和解）</h3><p><strong>正解是 DP（Kadane 算法）</strong>，但可以把它理解成一种**”带自动重置的伪滑动窗口”**：</p><p>维护一个”当前有效子数组”的和 cur：<br>right 每右移一步，cur +&#x3D; nums[right]，记录全局最大 ans &#x3D; max(ans, cur)<br>关键：如果 cur &lt; 0，说明当前这段子数组成了”累赘”直接丢弃整个窗口，cur &#x3D; 0，left 跳到 right + 1<br><strong>DP 视角（更本质）</strong>：<br>dp[i] &#x3D; 以 i 结尾的最大子数组和<br>dp[i] &#x3D; max(nums[i], dp[i-1] + nums[i])</p><p> “丢弃窗口”等价于选择 <code>nums[i]</code> 而不是 <code>dp[i-1] + nums[i]</code>，也就是当 <code>dp[i-1] &lt; 0</code> 时放弃前面的前缀。</p><h2 id="题目：206-反转链表-Reverse-Linked-List-—-递归版"><a href="#题目：206-反转链表-Reverse-Linked-List-—-递归版" class="headerlink" title="题目：206. 反转链表 (Reverse Linked List) — 递归版"></a>题目：206. 反转链表 (Reverse Linked List) — 递归版</h2><ul><li>链接：<a href="https://leetcode.cn/problems/reverse-linked-list/">https://leetcode.cn/problems/reverse-linked-list/</a></li><li>难度：Easy（但递归版容易写错指针）</li><li>标签： #链表 #递归 #指针操作</li><li>首次日期：2026-09-16</li></ul><hr><h3 id="1-当时为什么不会做-为什么写错？（核心卡点）"><a href="#1-当时为什么不会做-为什么写错？（核心卡点）" class="headerlink" title="1. 当时为什么不会做 &#x2F; 为什么写错？（核心卡点）"></a>1. 当时为什么不会做 &#x2F; 为什么写错？（核心卡点）</h3><p><strong>直觉方向</strong>：<br>&gt; 递归走到链表末尾，再逐层返回，每层让”后面的节点”指向”当前节点”。思路是对的。</p><p><strong>卡住点 &#x2F; 写错点</strong>：<br><strong>反转指向的代码写错了对象</strong>。你写的是：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">next = head;  <span class="comment">// ❌ 每次都修改&quot;新头节点&quot;的 next</span></span><br></pre></td></tr></table></figure><p>这会导致<strong>原尾节点（新头节点）的 next 被反复覆盖</strong>，中间节点全部丢失。</p><p><strong>为什么写错？</strong><br>混淆了”谁该指向谁”：</p><ul><li>你以为是：让<strong>新头节点 p</strong> 指向当前 head（建立反向链接）</li><li>实际上是：让<strong>当前 head 的下一个节点</strong>指向当前 head（<code>head-&gt;next-&gt;next = head</code>）</li></ul><p><strong>第二个隐藏 bug</strong>：<br>原头节点的 <code>next</code> 没有断开，反转后会形成环（<code>1-&gt;2-&gt;...-&gt;1</code>）</p><hr><h3 id="2-核心思路（正确逻辑）"><a href="#2-核心思路（正确逻辑）" class="headerlink" title="2. 核心思路（正确逻辑）"></a>2. 核心思路（正确逻辑）</h3><p><strong>递归定义</strong>：<code>Foo(head)</code> 返回反转后以 <code>head</code> 为起点的那一段链表的<strong>新头节点</strong>。</p><p><strong>递归过程</strong>：<br>假设链表：1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5<br>递归到最深处（base case）： 5 的 next 是 null，返回 5，dummy &#x3D; 5<br>逐层返回： 层 4：head&#x3D;4, p&#x3D;5。让 5-&gt;next &#x3D; 4，即 head-&gt;next-&gt;next &#x3D; head 层 3：head&#x3D;3, p&#x3D;5。让 4-&gt;next &#x3D; 3，即 head-&gt;next-&gt;next &#x3D; head …</p><p><strong>关键动作（每层只做两件事）</strong>：</p><ol><li><code>head-&gt;next-&gt;next = head</code> — 让<strong>后继节点</strong>指向自己（建立反向）</li><li><code>head-&gt;next = nullptr</code> — 断开自己原来的指向（防止成环）</li></ol><hr>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>常用shader代码片段</title>
       <link href="/2026/09/57bb47d198aa.html"/>
       <url>/2026/09/57bb47d198aa.html</url>
